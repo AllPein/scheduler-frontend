@@ -1,0 +1,29 @@
+.home {
+  display: flex;
+  &-menu__top-logo {
+      height: 150px;
+      width: 150px;
+      background: #6979F8;
+  }
+  &-main{
+    width: 100%;
+  }
+}
+
+.ant-menu-item-selected {
+    color: #6979F8;
+    border-right: 3px solid #6979F8 !important;
+    background-color: #fff !important;
+    span {
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
+      border-radius: 10px;
+      height: 70px;
+      width: 70px;
+    }
+  }
+  .ant-menu-item::after{
+    border-right: none !important;
+  }
+  .ant-menu-item-active{
+    color: #6979F8 !important;
+  }

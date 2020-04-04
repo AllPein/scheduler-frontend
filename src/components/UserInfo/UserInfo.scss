@@ -1,0 +1,77 @@
+@import '../../styles/mixins.scss';
+
+.user{
+    width: 380px;
+    margin-top: 204px;
+    padding-left: 30px;
+    &-top{
+        display: flex;
+        line-height: 34px;
+        font-size: 25px;
+        letter-spacing: 0.01em;
+        &__username{
+            font-weight: bold;
+        }
+        &__image{
+            margin-left: 70px;
+        }
+    }
+
+    &-bottom{
+
+        &__first, &__second{
+            display: flex;
+            justify-content: flex-start;
+            
+            div:nth-child(2){
+                margin-left: 140px;
+                
+            }
+            
+            
+
+            p{
+                opacity: 0.6;
+                line-height: 1;
+            }
+            h2{
+                font-weight: bold;
+                margin-left: 20px;
+                font-size: 18px;
+            }
+        }
+
+        &__first{
+            div:nth-child(1) {
+                h2::before{
+                    @include stick(#6979F8);
+                }
+            }
+            div:nth-child(2) {
+                h2::before{
+                    @include stick(#4CAF50);
+                }
+            }        
+        }
+        &__second{
+            margin-top: 20px;
+            div:nth-child(1) {
+                h2::before{
+                    @include stick(#FBC02D);
+                }
+            }
+            div:nth-child(2) {
+                h2::before{
+                    @include stick(#EF5350);
+                }
+            }        
+        }
+
+    }
+}
+
+
+.ant-divider{
+    min-width: 10px;
+    width: 350px !important;
+}

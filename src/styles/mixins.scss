@@ -1,0 +1,11 @@
+@mixin stick($color){
+    display: inline-block;
+    position: relative;
+    left: -13px;
+    top: 7px;
+    content: "";
+    z-index: 99;
+    background-color: $color;
+    width: 2.4px;
+    height: 30px;
+}
