@@ -1,14 +1,16 @@
 import React from 'react';
-import { ApolloProvider } from '@apollo/react-hooks';
+import { ApolloProvider, useLazyQuery } from '@apollo/react-hooks';
 import {ApolloClient} from 'apollo-boost';
-import { Route, Redirect, Switch } from 'react-router-dom';
-import { Home, Auth } from './pages/index';
 import { createHttpLink } from 'apollo-link-http';
 import { setContext } from 'apollo-link-context';
 import { InMemoryCache } from 'apollo-cache-inmemory';
+import gql from 'graphql-tag';
+import AppRouter  from './AppRouter';
+
+
 
 const httpLink = createHttpLink({
-  uri: 'https://2197dc90.ngrok.io/'
+  uri: 'https://58fdd0fd.ngrok.io/'
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -22,28 +24,31 @@ const authLink = setContext((_, { headers }) => {
   }
 });
 
+const cache = new InMemoryCache();
 const client = new ApolloClient({
   link: authLink.concat(httpLink),
-  cache: new InMemoryCache()
+  cache,
+  resolvers: {}
+});
+
+
+cache.writeData({
+  data: {
+    loggedIn: !!localStorage.getItem("token"),
+    user: {
+      __typename: 'User',
+      username: '',
+      email: ''
+    }
+  },
 });
 
 
 const App = () => {
-  const loggedIn = false;
-
   return (
     <div className="wrapper">
       <ApolloProvider client={client}>
-        <Switch>
-            <Route
-              path={["/login", "/register"]}
-              render={() => (!loggedIn ? <Auth />  : <Redirect to="/schedule" />)}
-            />
-            <Route
-              path="/"  
-              render={() => (loggedIn ? <Home /> : <Redirect to="/login" />)}
-            />
-          </Switch>
+        <AppRouter client={client} />
       </ApolloProvider>
     </div>
     

@@ -1,8 +1,45 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Form, Icon, Input, Button } from "antd";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
+import gql from 'graphql-tag';
+import { useLazyQuery, useMutation} from '@apollo/react-hooks';
+
+const GET_TOKEN = gql`
+  query getToken($email: String!, $password: String!){
+    getToken(email: $email, password: $password) {
+        user {
+            username
+            email
+        }
+        token
+    }
+  }
+`;
+
 
 const Login = props => {
+
+    
+    const [signIn, {data, loading, error, client}] = useLazyQuery(GET_TOKEN, {
+         onCompleted() {
+            localStorage.setItem("token", data.getToken.token);
+            client.writeData({
+                data: {
+                    user: data.getToken.user,  
+                    loggedIn: true
+                }
+            })
+            props.history.push("/schedule");
+        }
+    });
+    
+    const [email, setEmail] = useState(''); 
+    const [password, setPassword] = useState('');
+
+    const login =  () => {
+        signIn({ variables: { email, password } });
+    }
+
   return (
     <div className='auth'>
         <div className="auth-container">
@@ -19,6 +56,7 @@ const Login = props => {
                         >
                             <Input
                             id="email"
+                            onChange={({target: { value}}) => setEmail(value)}
                             prefix={<Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />}
                             size="large"
                             placeholder="E-Mail"
@@ -30,6 +68,7 @@ const Login = props => {
                         >
                             <Input
                             id="password"
+                            onChange={({target: { value}}) => setPassword(value)}
                             prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
                             size="large"
                             type="password"
@@ -39,8 +78,10 @@ const Login = props => {
                         </Form.Item>
                         <Form.Item>
                             <Button
+                            disabled={loading}
                             className='button'
                             size="large"
+                            onClick={login}
                             >
                             ВОЙТИ
                             </Button>
@@ -59,5 +100,5 @@ const Login = props => {
   )
 }
  
-export default Login;
+export default withRouter(Login);
  

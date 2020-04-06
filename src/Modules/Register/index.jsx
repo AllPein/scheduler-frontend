@@ -1,26 +1,41 @@
 import React, {useState} from 'react';
 import { Form, Icon, Input, Button } from "antd";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import gql from 'graphql-tag';
 import { useMutation } from '@apollo/react-hooks';
 
 const GET_TOKEN = gql`
   mutation createUser($email: String!, $username: String!, $password: String!){
-    createUser(email: $email, username: $username, password: $password)
+    createUser(email: $email, username: $username, password: $password) {
+        user {
+            username
+            email
+        }
+        token
+    }
   }
 `;
 
 
 const Register = props => {
-    const [signUp] = useMutation(GET_TOKEN)
+    const [signUp, {data, loading, error}] = useMutation(GET_TOKEN, {
+        update(cache, { data: { createUser: { user, token } } }) {
+            localStorage.setItem("token", token);
+            cache.writeData({
+                data: {
+                    user: user
+                }
+            })
+            props.history.push('/schedule');
+        }
+    });
     const [email, setEmail] = useState(''); 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const register = () => {
-        signUp({ variables: { email, username, password } })
+    const register =  () => {
+        signUp({ variables: { email, username, password } })  
     }
-
   return (
     <div className='auth'>
         <div className="auth-container">
@@ -72,6 +87,7 @@ const Register = props => {
                         
                         <Form.Item>
                             <Button
+                            disabled={loading}
                             className='button'
                             size="large"
                             onClick={register}
@@ -93,5 +109,5 @@ const Register = props => {
   )
 }
  
-export default Register;
+export default withRouter(Register);
  

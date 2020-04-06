@@ -1,9 +1,14 @@
 import React from 'react'
-import { Route } from 'react-router-dom';
+import { Route, withRouter } from 'react-router-dom';
 import { Login, Register } from '../../Modules/index'; 
 import './Auth.scss';
 
 const Auth = props => {
+  if (!!localStorage.getItem("token")) {
+    props.history.push('/schedule');
+}
+  
+
   return (
     <div className='auth-wrapper'>
         <Route path='/login' component={Login} />
@@ -13,5 +18,5 @@ const Auth = props => {
   )
 }
  
-export default Auth;
+export default withRouter(Auth);
  

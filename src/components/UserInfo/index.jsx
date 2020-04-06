@@ -1,6 +1,5 @@
 import React from 'react';
 import { Divider } from 'antd';
-
 import './UserInfo.scss';
 import AvatarMaleSvg from '../../assets/AvatarMale.svg';
 

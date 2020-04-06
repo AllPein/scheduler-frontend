@@ -1,9 +1,13 @@
 @import '../../styles/variables.scss';
 
-.tasks {
+.collections {
     height: 100%;
     width: 100%;
     
+    ::-webkit-scrollbar{
+        width: 0;
+    }
+
     &-head{
         display: flex;
         padding-top: 30px;
@@ -28,12 +32,15 @@
     }
 
     &-body{
+        overflow: scroll;
+        height: 850px;
         background-color: #F7F9FB;
         border-radius: 30px;
-        height: calc(100% - 125px);
         margin-top: 20px;
-        padding-left: 40px;
+        padding-left: 30px;
         padding-top: 20px;
+        
+        
         
     }
 }
@@ -45,3 +52,4 @@
     color: #fff !important;
     border-color: $purple !important;
 }
+

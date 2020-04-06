@@ -1,12 +1,21 @@
 import React from 'react'
-import { Navbar, Tasks, UserInfo } from '../../components/index';
-import { Route } from 'react-router-dom';
+import { Navbar, Collections, UserInfo } from '../../components/index';
+import { useLazyQuery } from '@apollo/react-hooks';
+import { Route, withRouter } from 'react-router-dom';
 import './Home.scss';
+import gql from 'graphql-tag';
 
+const GET_USER = gql`
+  query me {
+    username
+    email
+  }
+`
 
 const Home = props => {
-
-  
+  if (!localStorage.getItem("token")) {
+    props.history.push('/login');
+  }
 
   return (
     <div className='home' >
@@ -14,7 +23,7 @@ const Home = props => {
         <Navbar />
       </div>
       <div className="home-main">
-        <Route path='/schedule' component={Tasks} /> 
+        <Route path='/schedule' component={Collections} /> 
         
       </div>
       <div className="home-user">
@@ -24,5 +33,5 @@ const Home = props => {
   )
 }
  
-export default Home;
+export default withRouter(Home) ;
  
