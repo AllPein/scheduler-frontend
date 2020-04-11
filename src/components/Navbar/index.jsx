@@ -39,7 +39,7 @@ const Navbar = props => {
           <div className='home-menu__top-logo'>
 
           </div>
-          <Menu.Item key="schedule"  style={menuItemStyle}  >
+          <Menu.Item key='schedule' style={menuItemStyle}  >
             <FolderOutlined style={menuItemIcon}  />
           </Menu.Item>
           <Menu.Item key="deadlines" style={menuItemStyle}>

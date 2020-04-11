@@ -1,25 +1,15 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
+import { showNotification } from '../../utils/index';
 import { Form, Icon, Input, Button } from "antd";
+import { LoadingOutlined } from '@ant-design/icons';
 import { Link, withRouter } from "react-router-dom";
-import gql from 'graphql-tag';
-import { useLazyQuery, useMutation} from '@apollo/react-hooks';
+import { useLazyQuery} from '@apollo/react-hooks';
+import { GET_TOKEN } from '../../utils/graphql';
 
-const GET_TOKEN = gql`
-  query getToken($email: String!, $password: String!){
-    getToken(email: $email, password: $password) {
-        user {
-            username
-            email
-        }
-        token
-    }
-  }
-`;
+
 
 
 const Login = props => {
-
-    
     const [signIn, {data, loading, error, client}] = useLazyQuery(GET_TOKEN, {
          onCompleted() {
             localStorage.setItem("token", data.getToken.token);
@@ -39,6 +29,17 @@ const Login = props => {
     const login =  () => {
         signIn({ variables: { email, password } });
     }
+
+    useEffect(() => {
+        if (error){
+            showNotification({
+                text: error.toString(),
+                type: "error",
+                title: "Ошибка",
+            })
+        }
+        
+    }, [error]);
 
   return (
     <div className='auth'>
@@ -78,12 +79,13 @@ const Login = props => {
                         </Form.Item>
                         <Form.Item>
                             <Button
-                            disabled={loading}
                             className='button'
                             size="large"
                             onClick={login}
                             >
-                            ВОЙТИ
+                            {!loading ? (<span>ВОЙТИ</span>) : (
+                                <LoadingOutlined style={{ fontSize: 24 }} spin />
+                            )}
                             </Button>
                         </Form.Item>
                         <div>

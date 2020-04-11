@@ -1,24 +1,14 @@
-import React, {useState} from 'react';
+import React, { useState,useEffect } from 'react';
+import { showNotification } from '../../utils/index';
 import { Form, Icon, Input, Button } from "antd";
+import { LoadingOutlined } from '@ant-design/icons';
 import { Link, withRouter } from "react-router-dom";
-import gql from 'graphql-tag';
+import {CREATE_USER} from '../../utils/graphql';
 import { useMutation } from '@apollo/react-hooks';
-
-const GET_TOKEN = gql`
-  mutation createUser($email: String!, $username: String!, $password: String!){
-    createUser(email: $email, username: $username, password: $password) {
-        user {
-            username
-            email
-        }
-        token
-    }
-  }
-`;
 
 
 const Register = props => {
-    const [signUp, {data, loading, error}] = useMutation(GET_TOKEN, {
+    const [signUp, {data, loading, error}] = useMutation(CREATE_USER, {
         update(cache, { data: { createUser: { user, token } } }) {
             localStorage.setItem("token", token);
             cache.writeData({
@@ -32,6 +22,17 @@ const Register = props => {
     const [email, setEmail] = useState(''); 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
+    useEffect(() => {
+        if (error){
+            showNotification({
+                text: error.toString(),
+                type: "error",
+                title: "Ошибка",
+            })
+        }
+        
+    }, [error]);
 
     const register =  () => {
         signUp({ variables: { email, username, password } })  
@@ -86,13 +87,14 @@ const Register = props => {
                         </Form.Item>
                         
                         <Form.Item>
-                            <Button
-                            disabled={loading}
+                        <Button
                             className='button'
                             size="large"
                             onClick={register}
                             >
-                            СОЗДАТЬ
+                            {!loading ? (<span>СОЗДАТЬ</span>) : (
+                                <LoadingOutlined style={{ fontSize: 24 }} spin />
+                            )}
                             </Button>
                         </Form.Item>
                         <div>

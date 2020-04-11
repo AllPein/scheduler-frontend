@@ -6,7 +6,7 @@ import { Home, Auth } from './pages/index';
 const AppRouter = ({client}) => {
   return (
       <Switch>
-<Route
+        <Route
             path={["/login", "/register"]}
             component={Auth}
         />

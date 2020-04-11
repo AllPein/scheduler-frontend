@@ -4,13 +4,13 @@ import './UserInfo.scss';
 import AvatarMaleSvg from '../../assets/AvatarMale.svg';
 
 
-const UserInfo = props => {
+const UserInfo = ({user}) => {
   return (
       <div className="user">
         <div className="user-top">
             <div>
                 <h1>Hello,</h1>
-                <h1 className='user-top__username'>SANYA</h1>
+                <h1 className='user-top__username'>{user.username}</h1>
             </div>
             <div className="user-top__image">
                 <img src={AvatarMaleSvg} alt=""/>
