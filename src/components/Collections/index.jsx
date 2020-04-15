@@ -1,20 +1,66 @@
 import React, { useState } from 'react';
 import './Collections.scss';
 import {Collection} from '../index'
-import {Button, Input, Row, Col  } from 'antd';
-import { Link } from 'react-router-dom';
+import { Button, Input, Row, Col, Popover, Form } from 'antd';
+import { FireFilled } from '@ant-design/icons';
+import { Link, withRouter } from 'react-router-dom';
+import { ADD_COLLECTION } from '../../utils/graphql';
+import { useMutation } from '@apollo/react-hooks';
+
 const { Search } = Input;
 
-const Collections = ({collections}) => {
-  const [searchValue, setSearchValue] = useState("");
+const Collections = props => {
+  const {collections} = props;
 
-  const filteredCollections = collections.filter((item) => item.title.toLowerCase().indexOf(searchValue.toLowerCase()) != -1);
+  const [searchValue, setSearchValue] = useState("");
+  const [collectionName, setCollectionName] = useState("");
+
+  const [addCollection] = useMutation(ADD_COLLECTION, {
+    update(_, data){
+      props.history.push(`/collections/${collectionName}`);
+    }
+  }); 
+
+  const text = <span>Добавить коллекцию</span>;
+  const content = (
+    <Form className="auth-form">
+      <Form.Item
+          hasFeedback
+      >
+          <Input
+          id="title"
+          onChange={({target: { value}}) => setCollectionName(value)}
+          prefix={<FireFilled style={{ color: "rgba(0,0,0,.25)" }} />}
+          size="large"
+          placeholder="Название"
+      
+          />
+      </Form.Item>
+      <Form.Item
+          hasFeedback
+      >
+          <Button
+          onClick={() => addCollection({variables: { title: collectionName }})}
+          className='button'
+          size="large"
+          >
+          Добавить
+          </Button>
+      </Form.Item>
+      </Form>
+  );
+
+  let filteredCollections = [];
+  if (collections) filteredCollections = collections.filter((item) => item.title.toLowerCase().indexOf(searchValue.toLowerCase()) != -1);
+  
 
   return (
     <div className='collections'>
         <div className="collections-head">
             <h1>Коллекции</h1>
-            <Button shape="round" >Новая коллекция</Button>
+            <Popover placement="bottomLeft" title={text} content={content} trigger="click">
+              <Button shape="round" >Новая коллекция</Button>
+            </Popover>
         </div>
         <div className="collections-body">
             <div className="collections-body__top">
@@ -28,7 +74,7 @@ const Collections = ({collections}) => {
 
             <div className="collections-body__collections">
               <Row gutter={8} >
-                {collections.map((collection, i) => (
+                {filteredCollections.map((collection, i) => (
                   <Col style={{marginTop: '30px'}} className="gutter-row" key={i} xs={24} sm={24} md={24} lg={24} xl={8}>
                     <Link to={`/collections/${collection.title}`}>
                       <Collection 
@@ -50,5 +96,5 @@ const Collections = ({collections}) => {
   )
 }
  
-export default Collections;
+export default withRouter(Collections);
  

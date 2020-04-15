@@ -2,7 +2,7 @@ import React from 'react'
 import { Navbar, Collections, UserInfo, Tasks } from '../../components/index';
 import { useQuery } from '@apollo/react-hooks';
 import { LoadingOutlined } from '@ant-design/icons';
-import { Route, withRouter, Switch } from 'react-router-dom';
+import { Route, withRouter, Switch, Redirect } from 'react-router-dom';
 import './Home.scss';
 import { GET_USER } from '../../utils/graphql';
 

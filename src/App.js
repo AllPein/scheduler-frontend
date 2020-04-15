@@ -9,7 +9,7 @@ import AppRouter  from './AppRouter';
 
 
 const httpLink = createHttpLink({
-  uri: 'https://762d18b3.ngrok.io/'
+  uri: 'https://49c326f7.ngrok.io/'
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -17,7 +17,7 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : "",
+      Authorization: token ? `Bearer ${token}` : "",
       'Access-Control-Allow-Origin': '*'
     }
   }

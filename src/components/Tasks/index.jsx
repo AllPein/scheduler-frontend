@@ -3,26 +3,45 @@ import '../Collections/Collections.scss';
 import { withRouter } from 'react-router-dom';
 import { Task } from '../index';
 import { LoadingOutlined } from '@ant-design/icons';
-import {Button, Input, Row, Col  } from 'antd';
-import {GET_TASKS} from '../../utils/graphql';
-import {useQuery} from '@apollo/react-hooks';
+import { Modal, Button, Input, Row, Col, Icon, Form  } from 'antd';
+import { GET_TASKS, ADD_TASK } from '../../utils/graphql';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 const { Search } = Input;
 
 
-const Tasks = props => {
-    let collection = props.location.pathname.split('/collections/')[1];
-    const {data, loading, error} = useQuery(GET_TASKS, 
-        {variables: {collection: collection}});
 
+const Tasks = props => {
     const [searchValue, setSearchValue] = useState("");
-    let filteredTasks;
-    if (data)
-    filteredTasks = data.getTasks.filter((item) => item.title.toLowerCase().indexOf(searchValue.toLowerCase()) != -1);
+    const [isVisible, setIsVisible] = useState(false);
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [deadline, setDeadline] = useState("");
+
+    let collection = props.location.pathname.split('/collections/')[1];
+    const {data, loading, error, refetch, networkStatus } = useQuery(GET_TASKS, 
+        {
+            variables: { collection: collection },
+            notifyOnNetworkStatusChange: true
+        });
+
+    const [addTask] = useMutation(ADD_TASK);
+
+    const addNewTask = (title, deadline, description) => {
+        addTask({variables: { title, collection, description, deadline }});
+        refetch();
+        setIsVisible(false);
+
+    }
+    
+    let filteredTasks = [];
+    if (data) filteredTasks = data.getTasks.filter((item) => item.title.toLowerCase().indexOf(searchValue.toLowerCase()) != -1);
+
+
     return (
         <div className='collections'>
             <div className="collections-head">
                 <h1>{collection}</h1>
-                <Button shape="round" >Новое задание</Button>
+                <Button shape="round" onClick={() => setIsVisible(true)}>Новое задание</Button>
             </div>
             <div className="collections-body">
                 <div className="collections-body__top">
@@ -35,7 +54,7 @@ const Tasks = props => {
                 </div>
 
                 <div className="collections-body__collections">
-                    {loading ? (
+                    {loading || networkStatus == 4 ? (
                         <LoadingOutlined style={{ fontSize: 40 }} spin />
                     ) : (
                         <Row gutter={8} >
@@ -54,6 +73,64 @@ const Tasks = props => {
                     )}
                 </div>
             </div>
+
+            <Modal
+            title="Добавить задание" 
+            visible={isVisible} 
+            footer={null}
+            onCancel={() => setIsVisible(false)}
+            >
+                <Form className="auth-form">
+                    <Form.Item
+                        hasFeedback
+                    >
+                        <Input
+                        id="title"
+                        onChange={({target: { value}}) => setTitle(value)}
+                        prefix={<Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />}
+                        size="large"
+                        placeholder="Название"
+                    
+                        />
+                    </Form.Item>
+                    <Form.Item
+                        hasFeedback
+                    >
+                        <Input
+                        id="description"
+                        onChange={({target: { value}}) => setDescription(value)}
+                        prefix={<Icon type="team" style={{ color: "rgba(0,0,0,.25)" }} />}
+                        size="large"
+                        placeholder="Описание"
+                    
+                        />
+                    </Form.Item>
+                    <Form.Item
+                        hasFeedback
+                    >
+                        <Input
+                        id="deadline"
+                        onChange={({target: { value}}) => setDeadline(value)}
+                        prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
+                        size="large"
+                        placeholder="Дедлайн"
+                    
+                        />
+                    </Form.Item>
+                    
+                    <Form.Item>
+                        <Button
+                        className='button'
+                        size="large"
+                        onClick={() => addNewTask(title, deadline,  description)}
+                        >
+                        Добавить
+                        </Button>
+                    </Form.Item>
+                </Form>
+                            
+            </Modal>
+
         </div>
     )
 }

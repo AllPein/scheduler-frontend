@@ -7,9 +7,9 @@ const GET_USER = gql`
             username
             email
             collections {
-            title
-            count
-            completed
+                title
+                count
+                completed
             }
         }
     }
@@ -51,4 +51,21 @@ const CREATE_USER = gql`
   }
 `;
 
-export { CREATE_USER, GET_TOKEN, GET_USER, GET_TASKS };
+const ADD_TASK = gql`
+  mutation addTask($title: String!, $deadline: String!, $description: String!, $collection: String!){
+    addTask(input: { title: $title, deadline: $deadline, description: $description, collection: $collection }) {
+        title
+        description
+    }
+  }
+`;
+const ADD_COLLECTION = gql`
+  mutation addCollection($title: String!){
+    addCollection(input: { title: $title }) {
+        title
+    }
+  }
+`;
+
+
+export { CREATE_USER, GET_TOKEN, GET_USER, GET_TASKS, ADD_TASK, ADD_COLLECTION };
