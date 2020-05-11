@@ -21,15 +21,11 @@
 
         &__first, &__second{
             display: flex;
-            justify-content: flex-start;
-            
+            justify-content: flex-start;         
             div:nth-child(2){
                 margin-left: 140px;
                 
             }
-            
-            
-
             p{
                 opacity: 0.6;
                 line-height: 1;
@@ -67,6 +63,12 @@
             }        
         }
 
+    }
+    &-exit{
+        position: fixed;
+        bottom: 0;
+        width: 350px;
+        padding-right: 15px;
     }
 }
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { showNotification } from '../../utils/index';
-import { Form, Icon, Input, Button } from "antd";
-import { LoadingOutlined } from '@ant-design/icons';
+import { Form, Input, Button } from "antd";
+import { LoadingOutlined, LockFilled, MailFilled } from '@ant-design/icons';
 import { Link, withRouter } from "react-router-dom";
 import { useLazyQuery} from '@apollo/react-hooks';
 import { GET_TOKEN } from '../../utils/graphql';
@@ -19,7 +19,7 @@ const Login = props => {
                     loggedIn: true
                 }
             })
-            props.history.push("/schedule");
+            props.history.push("/");
         }
     });
     
@@ -58,7 +58,7 @@ const Login = props => {
                             <Input
                             id="email"
                             onChange={({target: { value}}) => setEmail(value)}
-                            prefix={<Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />}
+                            prefix={<MailFilled style={{ color: "rgba(0,0,0,.25)" }} />}
                             size="large"
                             placeholder="E-Mail"
                         
@@ -70,7 +70,7 @@ const Login = props => {
                             <Input
                             id="password"
                             onChange={({target: { value}}) => setPassword(value)}
-                            prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
+                            prefix={<LockFilled  style={{ color: "rgba(0,0,0,.25)" }} />}
                             size="large"
                             type="password"
                             placeholder="Пароль"

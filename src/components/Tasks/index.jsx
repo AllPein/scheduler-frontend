@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import '../Collections/Collections.scss'; 
+import './Tasks.scss'; 
 import { withRouter } from 'react-router-dom';
-import { Task } from '../index';
+import { Task, TasksTable } from '../index';
 import { LoadingOutlined } from '@ant-design/icons';
-import { Modal, Button, Input, Row, Col, Icon, Form  } from 'antd';
-import { GET_TASKS, ADD_TASK } from '../../utils/graphql';
+import { Modal, Button, Input, DatePicker, TimePicker, Form  } from 'antd';
+import { GET_TASKS, ADD_TASK, UPDATE_TASK } from '../../utils/graphql';
 import { useQuery, useMutation } from '@apollo/react-hooks';
+import moment from 'moment';
+
+const format = 'HH:mm';
 const { Search } = Input;
 
 
@@ -24,23 +28,36 @@ const Tasks = props => {
             notifyOnNetworkStatusChange: true
         });
 
+    const [updateTask] = useMutation(UPDATE_TASK, {
+        update(_, data){
+            refetch();
+        }
+    });  
+    const updTask = (title, id, isFavourite, done) => {
+        updateTask({variables: { title, id, favorite: isFavourite, done }});
+    }
     const [addTask] = useMutation(ADD_TASK);
-
     const addNewTask = (title, deadline, description) => {
         addTask({variables: { title, collection, description, deadline }});
         refetch();
         setIsVisible(false);
-
     }
     
-    let filteredTasks = [];
-    if (data) filteredTasks = data.getTasks.filter((item) => item.title.toLowerCase().indexOf(searchValue.toLowerCase()) != -1);
+    const onDateChange = (date) => {
+        if (date != null) setDeadline(date._d);
+    }
 
+    let filteredTasks = [];
+    if (data) filteredTasks = data.getTasks.filter((item) => item.title.toLowerCase().indexOf(searchValue.toLowerCase()) != -1).map((a, i) => Object.assign({key: i}, a));
 
     return (
         <div className='collections'>
             <div className="collections-head">
-                <h1>{collection}</h1>
+                <div className="collections-head__title">
+                    <Button shape="round" onClick={() => {props.history.push("/")} }>Назад</Button>
+                    <h1>{collection}</h1>
+                </div>
+                
                 <Button shape="round" onClick={() => setIsVisible(true)}>Новое задание</Button>
             </div>
             <div className="collections-body">
@@ -54,22 +71,10 @@ const Tasks = props => {
                 </div>
 
                 <div className="collections-body__collections">
-                    {loading || networkStatus == 4 ? (
+                    { loading && networkStatus !== 4 ? (
                         <LoadingOutlined style={{ fontSize: 40 }} spin />
                     ) : (
-                        <Row gutter={8} >
-                            {filteredTasks.map((task, i) => (
-                            <Col style={{marginTop: '30px'}} className="gutter-row" key={i} xs={24} sm={24} md={24} lg={24} xl={8}>
-                                <Task 
-                                title={task.title}
-                                done={task.done}
-                                deadline={task.deadline}
-                                collection={collection}
-                                />
-                                
-                            </Col>
-                            ))}
-                        </Row>
+                        <TasksTable updTask={updTask.bind(this)} data={filteredTasks} />
                     )}
                 </div>
             </div>
@@ -87,7 +92,6 @@ const Tasks = props => {
                         <Input
                         id="title"
                         onChange={({target: { value}}) => setTitle(value)}
-                        prefix={<Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />}
                         size="large"
                         placeholder="Название"
                     
@@ -99,7 +103,6 @@ const Tasks = props => {
                         <Input
                         id="description"
                         onChange={({target: { value}}) => setDescription(value)}
-                        prefix={<Icon type="team" style={{ color: "rgba(0,0,0,.25)" }} />}
                         size="large"
                         placeholder="Описание"
                     
@@ -108,14 +111,13 @@ const Tasks = props => {
                     <Form.Item
                         hasFeedback
                     >
-                        <Input
-                        id="deadline"
-                        onChange={({target: { value}}) => setDeadline(value)}
-                        prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
-                        size="large"
-                        placeholder="Дедлайн"
-                    
+                        <DatePicker 
+                        onChange={onDateChange} 
+                        showTime={true} 
+                        placeholder='Выберите дату окончания' 
+                        style={{ width: '100%' }} 
                         />
+                        
                     </Form.Item>
                     
                     <Form.Item>

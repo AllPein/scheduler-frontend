@@ -1,10 +1,17 @@
 import React from 'react';
-import { Divider } from 'antd';
+import {withRouter} from 'react-router-dom';
+import { Divider, Button } from 'antd';
 import './UserInfo.scss';
 import AvatarMaleSvg from '../../assets/AvatarMale.svg';
 
 
-const UserInfo = ({user}) => {
+const UserInfo = props => {
+  const {user} = props
+  const logOut = () => {
+      localStorage.removeItem("token");
+      props.history.push('/login');
+  }
+  
   return (
       <div className="user">
         <div className="user-top">
@@ -39,9 +46,17 @@ const UserInfo = ({user}) => {
                 </div>
             </div>
         </div>
+        <div className="user-exit">
+            <Button onClick={logOut} 
+            shape='round' 
+            block
+            >
+                Выйти
+            </Button>
+        </div>
       </div>
   )
 }
  
-export default UserInfo;
+export default withRouter(UserInfo);
  

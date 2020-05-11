@@ -9,7 +9,7 @@ import AppRouter  from './AppRouter';
 
 
 const httpLink = createHttpLink({
-  uri: 'https://49c326f7.ngrok.io/'
+  uri: 'https://todobackenddev.herokuapp.com/'
 });
 
 const authLink = setContext((_, { headers }) => {

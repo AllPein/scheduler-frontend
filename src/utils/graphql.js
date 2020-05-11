@@ -6,11 +6,7 @@ const GET_USER = gql`
         me {
             username
             email
-            collections {
-                title
-                count
-                completed
-            }
+            
         }
     }
 `;
@@ -29,13 +25,25 @@ const GET_TASKS = gql`
     query getTasks($collection: String!){
         getTasks(collection: $collection) {
             title
+            id
             description
             done
             deadline
+            favorite
         }
     }
 `
-
+const GET_COLLECTIONS = gql`
+    query getCollections{
+      getCollections {
+            id
+            favorite
+            completed
+            count
+            title
+        }
+    }
+`
 
 
 //MUTATIONS
@@ -56,6 +64,7 @@ const ADD_TASK = gql`
     addTask(input: { title: $title, deadline: $deadline, description: $description, collection: $collection }) {
         title
         description
+        deadline
     }
   }
 `;
@@ -66,6 +75,22 @@ const ADD_COLLECTION = gql`
     }
   }
 `;
+const UPDATE_COLLECTION = gql`, 
+  mutation updateCollection($title:String!, $favorite: Boolean, $id: ID!){
+    updateCollection(input: { title: $title, favorite: $favorite }, id: $id) {
+        title
+        favorite
+    }
+  }
+`;
+const UPDATE_TASK = gql`, 
+  mutation updateTask($title:String!, $id: ID!, $favorite: Boolean!, $done: Boolean!){
+    updateTask(input: { favorite: $favorite, title: $title, done: $done }, id: $id) {
+        title
+        favorite
+    }
+  }
+`;
 
 
-export { CREATE_USER, GET_TOKEN, GET_USER, GET_TASKS, ADD_TASK, ADD_COLLECTION };
+export { CREATE_USER, GET_TOKEN, GET_USER, GET_TASKS, ADD_TASK, ADD_COLLECTION, GET_COLLECTIONS, UPDATE_COLLECTION, UPDATE_TASK };

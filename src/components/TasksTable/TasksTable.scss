@@ -1,0 +1,26 @@
+@import '../../styles/variables.scss';
+
+tr {
+    
+    td:nth-child(2){
+        width: 1px;
+        font-size: 20px;
+        padding-left: 35px;
+        span:hover{
+            opacity: .6;
+        }
+    }
+}
+
+.ant-checkbox{
+    &-checked{
+        .ant-checkbox-inner{
+            background-color: $purple !important;
+            border-color: $purple !important;
+        }
+    }
+   
+}
+
+
+

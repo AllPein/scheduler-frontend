@@ -1,14 +1,37 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './Collection.scss';
-import {EllipsisOutlined, StarFilled, StarOutlined} from '@ant-design/icons';
-import { Progress } from 'antd';
+import {EllipsisOutlined, StarFilled, StarOutlined, CloseOutlined } from '@ant-design/icons';
+import { Progress, Popover, Button, Input } from 'antd';
 import classNames from 'classnames';
 
-const Collection = ({name, count, percentage, isFav}) => {
+
+const Collection = ({name, count, percentage, favorite, id, updCollection}) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const text = <span>Выберите действие</span>;
+  const content = (
+    <div>
+      <Button onClick={(e) => { e.preventDefault(); setIsEditing(true); }}>Изменить название</Button><br/>
+      <Button 
+      style={{ marginTop: '15px' }} 
+      onClick={(e) => { e.preventDefault(); setIsEditing(false); }} 
+      danger
+      >
+        Удалить коллекцию
+      </Button>
+    </div>
+  );
+  const resetTitle = (e) => {
+    e.preventDefault();
+    updCollection(e.target.value, id, favorite);
+    setIsEditing(false);
+  }
+
   return (
     <div className="collection">
       <div className="collection-top">
-        <EllipsisOutlined onClick={() => {}} />
+      <Popover placement="right" title={text} content={content} trigger="click">
+        <EllipsisOutlined  />
+      </Popover>
       </div>
       <div className="collection-body">
         <div className="collection-body__progress">
@@ -26,16 +49,25 @@ const Collection = ({name, count, percentage, isFav}) => {
           />
         </div>
         <div className="collection-body__info">
-          <h1>{name}</h1>
+          {!isEditing ? (
+            <h1>{name}</h1>
+          ) : (
+            <Input 
+            placeholder='Введите новое название' 
+            onClick={(e) => {e.preventDefault()}} 
+            onPressEnter={resetTitle} 
+            addonAfter={<CloseOutlined onClick={(e) => { e.preventDefault(); setIsEditing(false); }} />}
+            />
+          )}
           <h3>{count} заданий</h3>
         </div>
 
       </div>
       <div className="collection-bottom">
-        {!isFav ? (
-          <StarOutlined />
+        {!favorite ? (
+          <StarOutlined onClick={(e) => {e.preventDefault(); updCollection(name, id, !favorite)}} />
         ) : (
-          <StarFilled style={{ color: "#FFE600" }} onClick={() => {}} />
+          <StarFilled style={{ color: "#FFE600" }} onClick={(e) => {e.preventDefault(); updCollection(name, id, !favorite)}}  />
         )}
         
       </div>

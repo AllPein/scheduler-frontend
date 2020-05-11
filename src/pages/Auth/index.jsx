@@ -5,7 +5,7 @@ import './Auth.scss';
 
 const Auth = props => {
   if (!!localStorage.getItem("token")) {
-    props.history.push('/schedule');
+    props.history.push('/');
 }
   
 

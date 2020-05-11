@@ -18,17 +18,16 @@ const Home = props => {
   
   return (
     <div className='home' >
-      <div className="home-sidebar">
-        <Navbar />
-      </div>
+    
       <div className="home-main">
         {loading ? (
             <LoadingOutlined style={{ fontSize: 40 }} spin />
         ) : (
           <Switch>
             <Route
-                path='/schedule'
-                render={() => <Collections collections={data.me.collections} />}
+                exact
+                path='/'
+                render={() => <Collections />}
             />
             <Route
                 path='/collections/:id'

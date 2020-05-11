@@ -2,17 +2,31 @@
 
 .collections {
     height: 100%;
-    width: 100%;
+    width: calc(100%);
     
     ::-webkit-scrollbar{
         width: 0;
     }
 
+    
     &-head{
         display: flex;
         padding-top: 30px;
         justify-content: space-between;
         
+        &__title{
+            display: flex;
+            justify-content: left;
+            button{
+                width: 100px !important;
+                height: 30px !important;
+                font-size: 18px !important;
+                margin-top: 7px !important;
+                margin-right: 0px !important;
+                margin-left: 20px;
+                padding-top: 0 !important;
+            }
+        }
         h1 {
             margin-left: 40px;
             font-style: normal;
@@ -25,6 +39,7 @@
         button {
             font-size: 22px;
             color: #fff;
+            border: 1px solid $purple;
             background-color: $purple;
             margin-right: 100px;
             width: 277px;
@@ -33,7 +48,9 @@
     }
 
     &-body{
+        width: calc(100% );
         overflow: scroll;
+        scrollbar-width: none;
         height: 850px;
         background-color: #F7F9FB;
         border-radius: 30px;
@@ -41,7 +58,9 @@
         padding-left: 30px;
         padding-top: 20px;
         
-        
+        &__collections{
+            margin-top: 20px;
+        }
         
     }
 }
@@ -54,3 +73,6 @@
     border-color: $purple !important;
 }
 
+.ant-picker-time-panel-column{
+    scrollbar-width: thin;
+}

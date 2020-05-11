@@ -1,3 +1,5 @@
+@import '../../styles/variables.scss';
+
 .collection {
     width: 354px;
     height: 145px;
@@ -8,8 +10,14 @@
     &-top{
         span{
             float: right;
+            color: $gray;
             margin: 10px;
             font-size: 23px;
+        }
+    }
+    &-top:hover{
+        span{
+            opacity: .6;
         }
     }
     &-body{
@@ -26,14 +34,23 @@
                 opacity: .6;
                 font-weight: 400;
             }
+            input {
+                margin-bottom: 20px;
+            }
         }
     }
     &-bottom{
         span{
+            color: $gray;
             float: right;
             margin-bottom: 10px;
             margin-right: 13px;
             font-size: 23px;
+        }
+    }
+    &-bottom:hover{
+        span{
+            opacity: .6;
         }
     }
 }
