@@ -4,7 +4,7 @@ import {Collection} from '../index'
 import { Button, Input, Row, Col, Popover, Form } from 'antd';
 import { FireFilled } from '@ant-design/icons';
 import { Link, withRouter } from 'react-router-dom';
-import { ADD_COLLECTION, GET_COLLECTIONS, UPDATE_COLLECTION } from '../../utils/graphql';
+import { ADD_COLLECTION, GET_COLLECTIONS, UPDATE_COLLECTION, REMOVE_COLLECTION } from '../../utils/graphql';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 
 const { Search } = Input;
@@ -26,6 +26,11 @@ const Collections = props => {
       })
     }
   });
+  const [removeCollection] = useMutation(REMOVE_COLLECTION, {
+    update(_, data){
+      refetch()
+    }
+  });
   const [updateCollection] = useMutation(UPDATE_COLLECTION, {
     update(_, data){
       refetch();
@@ -33,6 +38,9 @@ const Collections = props => {
   });  
   const updCollection = (title, id, favorite) => {
     updateCollection({variables: { title, id, favorite }});
+  }
+  const rmvCollection = (id) => {
+    removeCollection({variables:  { id }});
   }
 
   const text = <span>Добавить коллекцию</span>;
@@ -93,6 +101,7 @@ const Collections = props => {
                     <Link to={`/collections/${collection.title}`}>
                       <Collection 
                       updCollection={updCollection.bind(this)}
+                      rmvCollection={rmvCollection.bind(this)}
                       name={collection.title}
                       id={collection.id}
                       count={collection.count}

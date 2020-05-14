@@ -75,6 +75,13 @@ const ADD_COLLECTION = gql`
     }
   }
 `;
+const REMOVE_COLLECTION = gql`
+  mutation removeCollection($id: ID!){
+    removeCollection(id: $id ) {
+      id
+    }
+  }
+`;
 const UPDATE_COLLECTION = gql`, 
   mutation updateCollection($title:String!, $favorite: Boolean, $id: ID!){
     updateCollection(input: { title: $title, favorite: $favorite }, id: $id) {
@@ -93,4 +100,4 @@ const UPDATE_TASK = gql`,
 `;
 
 
-export { CREATE_USER, GET_TOKEN, GET_USER, GET_TASKS, ADD_TASK, ADD_COLLECTION, GET_COLLECTIONS, UPDATE_COLLECTION, UPDATE_TASK };
+export { CREATE_USER, GET_TOKEN, GET_USER, GET_TASKS, ADD_TASK, ADD_COLLECTION, GET_COLLECTIONS, UPDATE_COLLECTION, UPDATE_TASK, REMOVE_COLLECTION };

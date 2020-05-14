@@ -5,7 +5,7 @@ import { Progress, Popover, Button, Input } from 'antd';
 import classNames from 'classnames';
 
 
-const Collection = ({name, count, percentage, favorite, id, updCollection}) => {
+const Collection = ({ name, count, percentage, favorite, id, updCollection, rmvCollection }) => {
   const [isEditing, setIsEditing] = useState(false);
   const text = <span>Выберите действие</span>;
   const content = (
@@ -13,7 +13,7 @@ const Collection = ({name, count, percentage, favorite, id, updCollection}) => {
       <Button onClick={(e) => { e.preventDefault(); setIsEditing(true); }}>Изменить название</Button><br/>
       <Button 
       style={{ marginTop: '15px' }} 
-      onClick={(e) => { e.preventDefault(); setIsEditing(false); }} 
+      onClick={(e) => { e.preventDefault(); rmvCollection(id); }} 
       danger
       >
         Удалить коллекцию
