@@ -1,15 +1,18 @@
 @import '../../styles/variables.scss';
 
-tr {
+.collections-body{
+    tr {
     
-    td:nth-child(2){
-        width: 1px;
-        font-size: 20px;
-        padding-left: 35px;
-        span:hover{
-            opacity: .6;
+        td:nth-child(2){
+            width: 1px;
+            font-size: 20px;
+            padding-left: 35px;
+            span:hover{
+                opacity: .6;
+            }
         }
     }
+    
 }
 
 .ant-checkbox{

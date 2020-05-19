@@ -14,8 +14,13 @@ const Home = props => {
   
   const { loading, error, data } = useQuery(GET_USER);
 
-  if (error) return `Error! ${error.message}`;
+  if (error) {
+    localStorage.removeItem("token");
+    localStorage.removeItem("USER_ID");
+    props.history.push('/login');
   
+  }
+
   return (
     <div className='home' >
     
@@ -37,7 +42,7 @@ const Home = props => {
         )}
       </div>
       <div className="home-user">
-        {!loading && <UserInfo user={data.me} />}
+        {!loading && data && <UserInfo user={data.me} />}
       </div>
     </div>
   )

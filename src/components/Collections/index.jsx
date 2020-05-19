@@ -10,7 +10,7 @@ import { useMutation, useQuery } from '@apollo/react-hooks';
 const { Search } = Input;
 
 const Collections = props => {
-  const {data, loading, error, refetch, networkStatus } = useQuery(GET_COLLECTIONS, 
+  const {data, loading, error, refetch,  networkStatus } = useQuery(GET_COLLECTIONS, 
     {
         notifyOnNetworkStatusChange: true
     });
@@ -26,15 +26,11 @@ const Collections = props => {
       })
     }
   });
-  const [removeCollection] = useMutation(REMOVE_COLLECTION, {
-    update(_, data){
-      refetch()
-    }
+  const [removeCollection] = useMutation(REMOVE_COLLECTION,  {
+    refetchQueries: ["getCollections"]
   });
   const [updateCollection] = useMutation(UPDATE_COLLECTION, {
-    update(_, data){
-      refetch();
-    }
+    refetchQueries: ["getCollections"]
   });  
   const updCollection = (title, id, favorite) => {
     updateCollection({variables: { title, id, favorite }});

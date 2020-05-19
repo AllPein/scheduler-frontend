@@ -29,17 +29,16 @@ const Tasks = props => {
         });
 
     const [updateTask] = useMutation(UPDATE_TASK, {
-        update(_, data){
-            refetch();
-        }
+        refetchQueries: ["getTasks"]
     });  
     const updTask = (title, id, isFavourite, done) => {
         updateTask({variables: { title, id, favorite: isFavourite, done }});
     }
-    const [addTask] = useMutation(ADD_TASK);
+    const [addTask] = useMutation(ADD_TASK, {
+        refetchQueries: ["getTasks"]
+    });
     const addNewTask = (title, deadline, description) => {
         addTask({variables: { title, collection, description, deadline }});
-        refetch();
         setIsVisible(false);
     }
     

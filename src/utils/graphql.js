@@ -77,9 +77,7 @@ const ADD_COLLECTION = gql`
 `;
 const REMOVE_COLLECTION = gql`
   mutation removeCollection($id: ID!){
-    removeCollection(id: $id ) {
-      id
-    }
+    removeCollection(id: $id ) 
   }
 `;
 const UPDATE_COLLECTION = gql`, 
